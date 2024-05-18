@@ -7,11 +7,10 @@ namespace ToDoTaskManager.Entities.Design
     {
         public MainFormLabel()
         {
-            // Установка свойств шрифта, цвета текста и размера текста
-            this.Font = new Font("Arial", 12f);
-            this.ForeColor = Color.Blue;
-            // Установка свойств цвета фона
-            this.BackColor = Color.LightGray;
+            Font = new Font("Arial", 20f);
+            ForeColor = Color.WhiteSmoke;
+            BackColor = Color.Transparent;
+            Anchor = AnchorStyles.Top;
         }
     }
 }
