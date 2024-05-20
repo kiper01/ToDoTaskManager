@@ -86,7 +86,7 @@ namespace ToDoTaskManager
                             Description = reader["Description"].ToString(),
                             StartTime = DateTime.Parse(reader["StartTime"].ToString()),
                             EndTime = DateTime.Parse(reader["EndTime"].ToString()),
-                            Status = (int)reader["Status"]
+                            Status = Convert.ToInt32(reader["Status"])
                         };
 
                         tasks.Add(task);
