@@ -32,11 +32,12 @@ namespace ToDoTaskManager
             DoubleBuffered = true;
 
             // Style
-            Size = new System.Drawing.Size(55, 55);
-            BackColor = Color.FromArgb(55, 71, 79);
-            ForeColor = Color.WhiteSmoke;
-            Font = new Font("Arial", 28f, FontStyle.Bold);
-            Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+            this.Size = new System.Drawing.Size(55, 55);
+            //this.BackColor = Color.SteelBlue;
+            this.BackColor = Color.FromArgb(55, 71, 79);
+            this.ForeColor = Color.WhiteSmoke;
+            this.Font = new Font("Arial", 28f, FontStyle.Bold);
+            this.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 
             SF.Alignment = StringAlignment.Center;
             SF.LineAlignment = StringAlignment.Center;
@@ -102,12 +103,6 @@ namespace ToDoTaskManager
             base.OnMouseUp(e);
             MousePressed = false;
 
-            if (MouseEntered)
-            {
-                Thread thread = new Thread(OpenNewWindow);
-                thread.Start();
-            }
-
             Invalidate();
         }
 
@@ -124,11 +119,6 @@ namespace ToDoTaskManager
             gp.CloseFigure();
 
             return gp;
-        }
-
-        private void OpenNewWindow()
-        {
-            Application.Run(new TaskCreater());
         }
     }
 }

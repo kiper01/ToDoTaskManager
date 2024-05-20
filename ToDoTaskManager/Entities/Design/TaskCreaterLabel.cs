@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace ToDoTaskManager.Entities.Design
@@ -7,11 +9,11 @@ namespace ToDoTaskManager.Entities.Design
     {
         public TaskCreaterLabel()
         {
-            Font = new Font("Arial", 16f);
-            ForeColor = Color.FromArgb(55, 71, 79);
-            BackColor = Color.Transparent;
-            Anchor = AnchorStyles.Top;
-            TextAlign = ContentAlignment.BottomLeft;
+            this.Font = new Font("Arial", 16f);
+            this.ForeColor = Color.FromArgb(55, 71, 79);
+            this.BackColor = Color.Transparent;
+            this.Anchor = AnchorStyles.Top;
+            this.TextAlign = ContentAlignment.BottomLeft;
         }
     }
 }

@@ -1,11 +1,6 @@
 ﻿using MaterialSkin.Controls;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,14 +12,71 @@ namespace ToDoTaskManager
         public MainForm()
         {
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new Size(700, 500);
-            this.MinimumSize = new Size(700, 500);
+            M();
         }
+
+        int i = 0;
+        async void M()
+        {
+            while (true)
+            {
+                i++;
+                UpdateLabel(i);
+                await Task.Delay(1000);
+            }
+        }
+
+        private void UpdateLabel(int value)
+        {
+            if (mainFormLabel2.InvokeRequired)
+            {
+                mainFormLabel2.Invoke(new Action(() => mainFormLabel2.Text = value.ToString()));
+            }
+            else
+            {
+                mainFormLabel2.Text = value.ToString();
+            }
+        }
+
+
+        private void mainFormButton1_Click(object sender, EventArgs e)
+        {
+            new TaskForm(this).Show();
+        }
+
+        //private void mainFormButton1_Click(object sender, EventArgs e)
+        //{
+        //    new Thread(() =>
+        //    {
+        //        //TaskCreater taskcreaterForm = new TaskCreater();
+        //        new TaskCreater().Show();
+        //    }).Start();
+        //}
+
+        //private Task OpenTaskCreaterFormAsync()
+        //{
+        //    return Task.Run(() =>
+        //    {
+        //        // Создаем новую форму в UI-потоке
+        //        if (this.InvokeRequired)
+        //        {
+        //            this.Invoke(new Action(() =>
+        //            {
+        //                TaskCreater taskcreaterForm = new TaskCreater();
+        //                taskcreaterForm.Show();
+        //            }));
+        //        }
+        //        else
+        //        {
+        //            TaskCreater taskcreaterForm = new TaskCreater();
+        //            taskcreaterForm.Show();
+        //        }
+        //    });
+        //}
 
         private void mainFormLabel1_Click(object sender, EventArgs e)
         {
-
+            // Обработчик для mainFormLabel1, если он нужен
         }
     }
 }
