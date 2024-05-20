@@ -41,7 +41,7 @@
             this.mainFormLabel2.BackColor = System.Drawing.Color.Transparent;
             this.mainFormLabel2.Font = new System.Drawing.Font("Arial", 20F);
             this.mainFormLabel2.ForeColor = System.Drawing.Color.Black;
-            this.mainFormLabel2.Location = new System.Drawing.Point(150, 180);
+            this.mainFormLabel2.Location = new System.Drawing.Point(33, 383);
             this.mainFormLabel2.Name = "mainFormLabel2";
             this.mainFormLabel2.Size = new System.Drawing.Size(216, 32);
             this.mainFormLabel2.TabIndex = 2;
@@ -75,7 +75,7 @@
             this.mainFormButton1.Text = "+";
             this.mainFormButton1.Click += new System.EventHandler(this.mainFormButton1_Click);
             // 
-            // MainForm1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -86,7 +86,7 @@
             this.Controls.Add(this.mainFormButton1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(700, 500);
-            this.Name = "MainForm1";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();

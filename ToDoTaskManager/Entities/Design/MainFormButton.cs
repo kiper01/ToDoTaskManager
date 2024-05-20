@@ -33,7 +33,6 @@ namespace ToDoTaskManager
 
             // Style
             this.Size = new System.Drawing.Size(55, 55);
-            //this.BackColor = Color.SteelBlue;
             this.BackColor = Color.FromArgb(55, 71, 79);
             this.ForeColor = Color.WhiteSmoke;
             this.Font = new Font("Arial", 28f, FontStyle.Bold);

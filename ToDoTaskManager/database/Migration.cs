@@ -10,20 +10,20 @@ namespace ToDoTaskManager
 {
     public class Migration
     {
-        private readonly string dbPath;
+        private readonly string _dbPath;
         private readonly string connectionPath; 
 
         public Migration(string directory, string dbName)
         {
-            dbPath = Path.Combine(directory, dbName);
-            connectionPath = $"Data Source={dbPath};";
+            _dbPath = Path.Combine(directory, dbName);
+            connectionPath = $"Data Source={_dbPath};";
         }
 
         public void Migrate()
         {
-            if (!File.Exists(dbPath))
+            if (!File.Exists(_dbPath))
             {
-                SQLiteConnection.CreateFile(dbPath);
+                SQLiteConnection.CreateFile(_dbPath);
                 using (SQLiteConnection conn = new SQLiteConnection(connectionPath))
                 {
                     conn.Open();
@@ -32,7 +32,8 @@ namespace ToDoTaskManager
                             Id TEXT NOT NULL PRIMARY KEY,
                             Description TEXT NOT NULL,
                             StartTime TEXT NOT NULL,
-                            EndTime TEXT NOT NULL
+                            EndTime TEXT NOT NULL,
+                            Status INTEGER NOT NULL
                         )";
                     using (SQLiteCommand cmd = new SQLiteCommand(createTableQuery, conn))
                     {

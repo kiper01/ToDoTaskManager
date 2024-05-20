@@ -9,8 +9,10 @@ namespace ToDoTaskManager
 {
     public partial class MainForm : MaterialForm
     {
-        public MainForm()
+        private TasksList _tasksList;
+        public MainForm(TasksList TasksList)
         {
+            _tasksList = TasksList;
             InitializeComponent();
             M();
         }
@@ -39,44 +41,15 @@ namespace ToDoTaskManager
         }
 
 
-        private void mainFormButton1_Click(object sender, EventArgs e)
+        private void mainFormButton1_Click(object sender, EventArgs e) 
+        //добавить какое нибудь ограничение на количество существующих форм!!!!!!!!!!
         {
-            new TaskForm(this).Show();
+            new TaskForm(this, _tasksList).Show();
         }
-
-        //private void mainFormButton1_Click(object sender, EventArgs e)
-        //{
-        //    new Thread(() =>
-        //    {
-        //        //TaskCreater taskcreaterForm = new TaskCreater();
-        //        new TaskCreater().Show();
-        //    }).Start();
-        //}
-
-        //private Task OpenTaskCreaterFormAsync()
-        //{
-        //    return Task.Run(() =>
-        //    {
-        //        // Создаем новую форму в UI-потоке
-        //        if (this.InvokeRequired)
-        //        {
-        //            this.Invoke(new Action(() =>
-        //            {
-        //                TaskCreater taskcreaterForm = new TaskCreater();
-        //                taskcreaterForm.Show();
-        //            }));
-        //        }
-        //        else
-        //        {
-        //            TaskCreater taskcreaterForm = new TaskCreater();
-        //            taskcreaterForm.Show();
-        //        }
-        //    });
-        //}
 
         private void mainFormLabel1_Click(object sender, EventArgs e)
         {
-            // Обработчик для mainFormLabel1, если он нужен
+            
         }
     }
 }

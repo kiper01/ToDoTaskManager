@@ -9,11 +9,13 @@ namespace ToDoTaskManager
 {
     public partial class TaskForm : MaterialForm
     {
-        private MainForm mainForm;
-        public TaskForm(MainForm MainForm)
+        private MainForm _mainForm;
+        private TasksList _tasksList;
+        public TaskForm(MainForm MainForm, TasksList TasksList)
         {
             InitializeComponent();
-            mainForm = MainForm;
+            _mainForm = MainForm;
+            _tasksList = TasksList;
         }
 
         private void mainFormLabel1_Click(object sender, System.EventArgs e)
@@ -66,10 +68,11 @@ namespace ToDoTaskManager
                     Id = Guid.NewGuid(),
                     Description = description,
                     StartTime = startTime,
-                    EndTime = endTime
+                    EndTime = endTime,
+                    Status = 1
                 };
 
-                Repository.Instance.AddTask(newTask);
+                _tasksList.AddTask(newTask);
 
                 MessageBox.Show("Задача добавлена.", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

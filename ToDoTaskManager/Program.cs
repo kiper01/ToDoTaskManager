@@ -22,14 +22,15 @@ namespace ToDoTaskManager
             Migration migration = new Migration(directory, dbName);
             migration.Migrate();
 
-            //db conn
+            //db conn && tasklist init
             string conn = $"Data Source={Path.Combine(directory, dbName)}";
-            Repository.GetInstance(conn);
+            Repository repo = new Repository(conn);
+            TasksList tasksList = new TasksList(repo);
 
             //app start
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new MainForm(tasksList));
         }
     }
 }

@@ -10,36 +10,25 @@ namespace ToDoTaskManager
     public class Repository
     {
         private readonly string connectionPath;
-        private static Repository instance;
 
-        private Repository(string connectionPath)
+        internal Repository(string connectionPath)
         {
             this.connectionPath = connectionPath;
         }
-
-        public static Repository GetInstance(string connectionPath)
-        {
-            if (instance == null)
-            {
-                instance = new Repository(connectionPath);
-            }
-            return instance;
-        }
-
-        public static Repository Instance { get { return instance; } }
         
         public void AddTask(Tasks task)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionPath))
             {
                 conn.Open();
-                string sql = "INSERT INTO Tasks (Id, Description, StartTime, EndTime) VALUES (@Id, @Description, @StartTime, @EndTime)";
+                string sql = "INSERT INTO Tasks (Id, Description, StartTime, EndTime, Status) VALUES (@Id, @Description, @StartTime, @EndTime, @Status)";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", task.Id.ToString());
                     cmd.Parameters.AddWithValue("@Description", task.Description);
                     cmd.Parameters.AddWithValue("@StartTime", task.StartTime.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmd.Parameters.AddWithValue("@EndTime", task.EndTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("@Status", task.Status);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -65,19 +54,20 @@ namespace ToDoTaskManager
             using (SQLiteConnection conn = new SQLiteConnection(connectionPath))
             {
                 conn.Open();
-                string sql = "UPDATE Tasks SET Description = @Description, StartTime = @StartTime, EndTime = @EndTime WHERE Id = @Id";
+                string sql = "UPDATE Tasks SET Description = @Description, StartTime = @StartTime, EndTime = @EndTime, Status = @Status WHERE Id = @Id";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", task.Id.ToString());
                     cmd.Parameters.AddWithValue("@Description", task.Description);
                     cmd.Parameters.AddWithValue("@StartTime", task.StartTime.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmd.Parameters.AddWithValue("@EndTime", task.EndTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("@Status", task.Status);
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public List<Tasks> GetAllTasks()
+        public List<Tasks> GetAll()
         {
             List<Tasks> tasks = new List<Tasks>();
 
@@ -95,7 +85,8 @@ namespace ToDoTaskManager
                             Id = Guid.Parse(reader["Id"].ToString()),
                             Description = reader["Description"].ToString(),
                             StartTime = DateTime.Parse(reader["StartTime"].ToString()),
-                            EndTime = DateTime.Parse(reader["EndTime"].ToString())
+                            EndTime = DateTime.Parse(reader["EndTime"].ToString()),
+                            Status = (int)reader["Status"]
                         };
 
                         tasks.Add(task);

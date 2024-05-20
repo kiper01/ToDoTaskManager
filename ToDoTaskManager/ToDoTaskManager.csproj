@@ -99,6 +99,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Entities\Tasks.cs" />
+    <Compile Include="Entities\TasksList.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
