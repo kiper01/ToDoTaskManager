@@ -34,7 +34,7 @@ namespace ToDoTaskManager
             await InitializeTaskBlocksAsync();
         }
 
-        private async Task InitializeTaskBlocksAsync()
+        private async Task InitializeTaskBlocksAsync() //Инициализация списка заданий, а также вызов метода с созданием UI блока с заданием.
         {
             await UpdateTasksListStatusAsync(_tasksList);
             var tasks = await _tasksList.GetAllTasksAsync();
@@ -45,13 +45,13 @@ namespace ToDoTaskManager
             }
         }
 
-        public async void MainFormUpdater()
+        public async void MainFormUpdater() //Обновление UI MainForm
         {
             mainFormFlowLayoutPanel1.Controls.Clear();
             await InitializeTaskBlocksAsync();
         }
 
-        private MainFormFlowPanel CreateTaskBlock(Tasks task)
+        private MainFormFlowPanel CreateTaskBlock(Tasks task) //Создание блоков с заданиями
         {
             MainFormFlowPanel panel = new MainFormFlowPanel
             {
@@ -108,25 +108,25 @@ namespace ToDoTaskManager
             return panel;
         }
 
-        private string GetTimeInterval(Tasks task)
+        private string GetTimeInterval(Tasks task) // Отчет секунды таймера
         {
             TimeSpan timer = task.EndTime - DateTime.Now;
             return timer.ToString(@"hh\:mm\:ss");
         }
 
-        private async Task CompleteTaskAsync(Tasks task)
+        private async Task CompleteTaskAsync(Tasks task) //Метод для кнопки "Выполнить задание"
         {
             task.Status = TaskStatus.Completed;
             await _tasksList.UpdateTaskAsync(task);
             MainFormUpdater();
         }
 
-        private void EditTask(Tasks task)
+        private void EditTask(Tasks task) //Метод для кнопки редактирования задания
         {
             OpenTaskForm(this, _tasksList, task);
         }
 
-        private async Task DeleteTaskAsync(Tasks task)
+        private async Task DeleteTaskAsync(Tasks task) //Метод для удаления задания из формы и бд
         {
             var confirmResult = MessageBox.Show("Вы точно хотите удалить эту задачу?", "Удаление задачи", MessageBoxButtons.YesNo);
             if (confirmResult == DialogResult.Yes)
@@ -136,7 +136,7 @@ namespace ToDoTaskManager
             }
         }
 
-        public void OpenTaskForm(MainForm mainForm, TasksList tasksList)
+        public void OpenTaskForm(MainForm mainForm, TasksList tasksList) //Перегруженный метод для открытия TaskForm (создание)
         {
             if (Application.OpenForms.OfType<TaskForm>().Count() == 0)
             {
@@ -144,7 +144,7 @@ namespace ToDoTaskManager
             }
         }
 
-        public void OpenTaskForm(MainForm mainForm, TasksList tasksList, Tasks task)
+        public void OpenTaskForm(MainForm mainForm, TasksList tasksList, Tasks task) //Перегруженный метод для открытия TaskForm (редактирование)
         {
             if (Application.OpenForms.OfType<TaskForm>().Count() == 0)
             {
@@ -152,37 +152,22 @@ namespace ToDoTaskManager
             }
         }
 
-        private void mainFormButton1_Click(object sender, EventArgs e)
-        {
-            OpenTaskForm(this, _tasksList);
-        }
-
-        private void mainFormLabel1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void mainFormLabel2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e) //Завершение работы программы
         {
             _timer.Stop();
             _timer.Dispose();
             base.OnFormClosing(e);
         }
 
-        private async void Timer_Tick(object sender, EventArgs e)
+        private async void Timer_Tick(object sender, EventArgs e)// Тик таймера (вызывается каждую секунду)
         {
             await UpdateTimerLabelsAsync();
         }
 
-        private async Task UpdateTimerLabelsAsync()
+        private async Task UpdateTimerLabelsAsync() // Метод прохода по листу заданий и отсчета секунды от таймера + проверка на статусы заданий
         {
             var tasks = await _tasksList.GetAllTasksAsync();
-            var tasksCopy = new List<Tasks>(tasks); // Создание копии списка задач
+            var tasksCopy = new List<Tasks>(tasks);
 
             foreach (var task in tasksCopy)
             {
@@ -215,14 +200,14 @@ namespace ToDoTaskManager
         }
 
 
-        private async Task UpdateTaskStatusAsync()
+        private async Task UpdateTaskStatusAsync() 
         {
             await UpdateTasksListStatusAsync(_tasksList);
             MainFormUpdater();
             _updateScanner = false;
         }
 
-        private async Task UpdateTasksListStatusAsync(TasksList tasksList)
+        private async Task UpdateTasksListStatusAsync(TasksList tasksList) // Обновление статусов заданий 
         {
             List<Tasks> newListTasks = new List<Tasks>();
             var tasks = await tasksList.GetAllTasksAsync();
@@ -253,6 +238,21 @@ namespace ToDoTaskManager
                 await tasksList.UpdateTaskAsync(task);
             }
             _messageScanner = true;
+        }
+
+        private void mainFormButton1_Click(object sender, EventArgs e)
+        {
+            OpenTaskForm(this, _tasksList);
+        }
+
+        private void mainFormLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mainFormLabel2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
