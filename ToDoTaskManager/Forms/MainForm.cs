@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ToDoTaskManager.Entities.Design;
@@ -14,19 +13,25 @@ namespace ToDoTaskManager
     public partial class MainForm : MaterialForm
     {
         private readonly TasksList _tasksList;
-        private CancellationTokenSource _cancellationTokenSource;
+        private Timer _timer;
+        private bool _updateScanner = false;
+        private bool _messageScanner = true;
 
         public MainForm(TasksList tasksList)
         {
             _tasksList = tasksList;
             InitializeComponent();
             this.Load += async (s, e) => await MainForm_LoadAsync();
+
+            _timer = new Timer();
+            _timer.Interval = 1000;
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
         private async Task MainForm_LoadAsync()
         {
             await InitializeTaskBlocksAsync();
-            UpdateTimer();
         }
 
         private async Task InitializeTaskBlocksAsync()
@@ -164,39 +169,22 @@ namespace ToDoTaskManager
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            StopUpdateTimer();
+            _timer.Stop();
+            _timer.Dispose();
             base.OnFormClosing(e);
         }
 
-        private void UpdateTimer()
+        private async void Timer_Tick(object sender, EventArgs e)
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-            var token = _cancellationTokenSource.Token;
-
-            Task.Run(async () =>
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    await Task.Delay(1000);
-                    if (!token.IsCancellationRequested)
-                    {
-                        this.Invoke(new Action(UpdateTimerLabels));
-                    }
-                }
-            }, token);
+            await UpdateTimerLabelsAsync();
         }
 
-        private void StopUpdateTimer()
+        private async Task UpdateTimerLabelsAsync()
         {
-            _cancellationTokenSource?.Cancel();
-        }
+            var tasks = await _tasksList.GetAllTasksAsync();
+            var tasksCopy = new List<Tasks>(tasks); // Создание копии списка задач
 
-        private bool updateScanner = false;
-        private void UpdateTimerLabels()
-        {
-            if (updateScanner) UpdateTaskStatus();
-            var tasks = _tasksList.GetAllTasksAsync().Result;
-            foreach (var task in tasks)
+            foreach (var task in tasksCopy)
             {
                 var timerLabel = mainFormFlowLayoutPanel1.Controls.Find($"timer_{task.Id}", true).FirstOrDefault() as Label;
                 if (timerLabel != null && task.Status != TaskStatus.Overdue && task.Status != TaskStatus.Completed)
@@ -205,23 +193,33 @@ namespace ToDoTaskManager
 
                     if (task.EndTime < DateTime.Now)
                     {
-                        updateScanner = true;
+                        _updateScanner = true;
                     }
 
                     if ((task.EndTime - DateTime.Now).TotalSeconds <= 300 && task.Status == TaskStatus.InProgress)
                     {
-                        updateScanner = true;
-                        MessageBox.Show("Срок выполнения одной из ваших задач близится к концу.", "Дедлайн", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                        if (_messageScanner)
+                        {
+                            _updateScanner = true;
+                            _messageScanner = false;
+                            MessageBox.Show("Срок выполнения одной из ваших задач близится к концу.", "Дедлайн", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }   
                 }
+            }
+
+            if (_updateScanner)
+            {
+                await UpdateTaskStatusAsync();
             }
         }
 
-        private async void UpdateTaskStatus()
+
+        private async Task UpdateTaskStatusAsync()
         {
             await UpdateTasksListStatusAsync(_tasksList);
             MainFormUpdater();
-            updateScanner = false;
+            _updateScanner = false;
         }
 
         private async Task UpdateTasksListStatusAsync(TasksList tasksList)
@@ -254,6 +252,7 @@ namespace ToDoTaskManager
             {
                 await tasksList.UpdateTaskAsync(task);
             }
+            _messageScanner = true;
         }
     }
 }
