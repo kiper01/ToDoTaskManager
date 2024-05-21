@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ToDoTaskManager
 {
     public class MainFormButton : Control
     {
-        private StringFormat SF = new StringFormat();
+        private readonly StringFormat SF = new StringFormat();
         private bool MouseEntered = false;
         private bool MousePressed = false;
 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,7 +11,7 @@ namespace ToDoTaskManager
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
-        static void Main()
+        static async Task Main()
         {
             //db migrate
             string directory = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "database");
@@ -26,6 +23,7 @@ namespace ToDoTaskManager
             string conn = $"Data Source={Path.Combine(directory, dbName)}";
             Repository repo = new Repository(conn);
             TasksList tasksList = new TasksList(repo);
+            await tasksList.InitializeTasksAsync();
 
             //app start
             Application.EnableVisualStyles();
@@ -34,4 +32,3 @@ namespace ToDoTaskManager
         }
     }
 }
-//MessageBox.Show("Срок выполнения одной из ваших задач близится к концу.", "Дедлайн", MessageBoxButtons.OK, MessageBoxIcon.Information);

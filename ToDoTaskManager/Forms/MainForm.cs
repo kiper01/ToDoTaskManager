@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
 using ToDoTaskManager.Entities.Design;
 using ToDoTaskManager.Properties;
@@ -14,35 +13,41 @@ namespace ToDoTaskManager
 {
     public partial class MainForm : MaterialForm
     {
-        private TasksList _tasksList;
+        private readonly TasksList _tasksList;
         private CancellationTokenSource _cancellationTokenSource;
 
         public MainForm(TasksList tasksList)
         {
             _tasksList = tasksList;
             InitializeComponent();
-            InitializeTaskBlocks();
+            this.Load += async (s, e) => await MainForm_LoadAsync();
+        }
+
+        private async Task MainForm_LoadAsync()
+        {
+            await InitializeTaskBlocksAsync();
             UpdateTimer();
         }
 
-        private void InitializeTaskBlocks()
+        private async Task InitializeTaskBlocksAsync()
         {
-            UpdateTasksListStatus(_tasksList);
-            foreach (var task in _tasksList.GetAllTasks())
+            await UpdateTasksListStatusAsync(_tasksList);
+            var tasks = await _tasksList.GetAllTasksAsync();
+            foreach (var task in tasks)
             {
                 Panel taskPanel = CreateTaskBlock(task);
                 mainFormFlowLayoutPanel1.Controls.Add(taskPanel);
             }
         }
 
-        public void MainFormUpdater()
+        public async void MainFormUpdater()
         {
             mainFormFlowLayoutPanel1.Controls.Clear();
-            InitializeTaskBlocks();
+            await InitializeTaskBlocksAsync();
         }
 
         private MainFormFlowPanel CreateTaskBlock(Tasks task)
-        {             
+        {
             MainFormFlowPanel panel = new MainFormFlowPanel
             {
                 Name = $"panel_{task.Id}"
@@ -55,18 +60,18 @@ namespace ToDoTaskManager
 
             switch (task.Status)
             {
-                case 1:
-                    break;
-                case 2:
+                case TaskStatus.CloseToCompletion:
                     panel.BackColor = Color.Wheat;
                     break;
-                case 3:
+                case TaskStatus.Overdue:
                     panel.BackColor = Color.IndianRed;
                     timer.Text = "Время вышло";
                     break;
-                case 4:
+                case TaskStatus.Completed:
                     panel.BackColor = Color.LightGreen;
                     timer.Text = "Выполнено";
+                    break;
+                default:
                     break;
             }
 
@@ -85,9 +90,9 @@ namespace ToDoTaskManager
                 BackgroundImage = Resources.trash
             };
 
-            completeButton.Click += (sender, e) => CompleteTask(task);
+            completeButton.Click += async (sender, e) => await CompleteTaskAsync(task);
             editButton.Click += (sender, e) => EditTask(task);
-            deleteButton.Click += (sender, e) => DeleteTask(task);
+            deleteButton.Click += async (sender, e) => await DeleteTaskAsync(task);
 
             panel.Controls.Add(descriptionLabel);
             panel.Controls.Add(timer);
@@ -102,12 +107,12 @@ namespace ToDoTaskManager
         {
             TimeSpan timer = task.EndTime - DateTime.Now;
             return timer.ToString(@"hh\:mm\:ss");
-        }   
+        }
 
-        private void CompleteTask(Tasks task)
+        private async Task CompleteTaskAsync(Tasks task)
         {
-            task.Status = 4;
-            _tasksList.UpdateTask(task);
+            task.Status = TaskStatus.Completed;
+            await _tasksList.UpdateTaskAsync(task);
             MainFormUpdater();
         }
 
@@ -116,14 +121,12 @@ namespace ToDoTaskManager
             OpenTaskForm(this, _tasksList, task);
         }
 
-        private void DeleteTask(Tasks task)
+        private async Task DeleteTaskAsync(Tasks task)
         {
-            var confirmResult = MessageBox.Show("Вы точно хотите удалить эту задачу?",
-                                     "Удаление задачи",
-                                     MessageBoxButtons.YesNo);
+            var confirmResult = MessageBox.Show("Вы точно хотите удалить эту задачу?", "Удаление задачи", MessageBoxButtons.YesNo);
             if (confirmResult == DialogResult.Yes)
             {
-                _tasksList.RemoveTask(task.Id);
+                await _tasksList.RemoveTaskAsync(task.Id);
                 MainFormUpdater();
             }
         }
@@ -188,14 +191,15 @@ namespace ToDoTaskManager
             _cancellationTokenSource?.Cancel();
         }
 
-        bool updateScanner = false;
+        private bool updateScanner = false;
         private void UpdateTimerLabels()
         {
             if (updateScanner) UpdateTaskStatus();
-            foreach (var task in _tasksList.GetAllTasks())
+            var tasks = _tasksList.GetAllTasksAsync().Result;
+            foreach (var task in tasks)
             {
                 var timerLabel = mainFormFlowLayoutPanel1.Controls.Find($"timer_{task.Id}", true).FirstOrDefault() as Label;
-                if (timerLabel != null && task.Status != 3 && task.Status != 4)
+                if (timerLabel != null && task.Status != TaskStatus.Overdue && task.Status != TaskStatus.Completed)
                 {
                     timerLabel.Text = GetTimeInterval(task);
 
@@ -204,7 +208,7 @@ namespace ToDoTaskManager
                         updateScanner = true;
                     }
 
-                    if ((task.EndTime - DateTime.Now).TotalSeconds <= 300 && task.Status == 1)
+                    if ((task.EndTime - DateTime.Now).TotalSeconds <= 300 && task.Status == TaskStatus.InProgress)
                     {
                         updateScanner = true;
                         MessageBox.Show("Срок выполнения одной из ваших задач близится к концу.", "Дедлайн", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -213,35 +217,34 @@ namespace ToDoTaskManager
             }
         }
 
-        private void UpdateTaskStatus()
+        private async void UpdateTaskStatus()
         {
-            UpdateTasksListStatus(_tasksList);
+            await UpdateTasksListStatusAsync(_tasksList);
             MainFormUpdater();
             updateScanner = false;
         }
 
-        private void UpdateTasksListStatus(TasksList _tasksList)
+        private async Task UpdateTasksListStatusAsync(TasksList tasksList)
         {
             List<Tasks> newListTasks = new List<Tasks>();
-            foreach (var task in _tasksList.GetAllTasks())
+            var tasks = await tasksList.GetAllTasksAsync();
+            foreach (var task in tasks)
             {
-                if (task.Status == 4 || task.Status == 3) continue;
+                if (task.Status == TaskStatus.Completed || task.Status == TaskStatus.Overdue) continue;
 
                 TimeSpan remainingTime = task.EndTime - DateTime.Now;
 
                 if (task.EndTime < DateTime.Now)
                 {
-                    task.Status = 3;
+                    task.Status = TaskStatus.Overdue;
                 }
-
                 else if (remainingTime.TotalMinutes <= 5)
                 {
-                    task.Status = 2;
+                    task.Status = TaskStatus.CloseToCompletion;
                 }
-
                 else
                 {
-                    task.Status = 1;
+                    task.Status = TaskStatus.InProgress;
                 }
 
                 newListTasks.Add(task);
@@ -249,9 +252,8 @@ namespace ToDoTaskManager
 
             foreach (var task in newListTasks)
             {
-                _tasksList.UpdateTask(task);
+                await tasksList.UpdateTaskAsync(task);
             }
         }
-
     }
 }

@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="database\Migration.cs" />
     <Compile Include="database\Repository.cs" />
+    <Compile Include="Entities\AddTaskHandler.cs" />
     <Compile Include="Entities\Design\MainFormButton.cs">
       <SubType>Component</SubType>
     </Compile>
