@@ -34,3 +34,4 @@ namespace ToDoTaskManager
         }
     }
 }
+//MessageBox.Show("Срок выполнения одной из ваших задач близится к концу.", "Дедлайн", MessageBoxButtons.OK, MessageBoxIcon.Information);

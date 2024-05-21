@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ToDoTaskManager.Entities.Design;
 
 namespace ToDoTaskManager
 {
@@ -11,11 +12,29 @@ namespace ToDoTaskManager
     {
         private MainForm _mainForm;
         private TasksList _tasksList;
+        private Tasks _task;
+        private bool check;
         public TaskForm(MainForm MainForm, TasksList TasksList)
         {
             InitializeComponent();
             _mainForm = MainForm;
             _tasksList = TasksList;
+            check = true;
+        }
+
+        public TaskForm(MainForm MainForm, TasksList TasksList, Tasks task)
+        {
+            InitializeComponent();
+            _mainForm = MainForm;
+            _tasksList = TasksList;
+            _task = task;
+            mainFormLabel1.Text = "Редактирование задачи";
+            mainFormLabel1.Location = new Point(10, 27);
+            materialFlatButton1.Text = "Сохранить";
+            materialFlatButton1.Location = new Point(145, 450);
+            taskCreaterTextBox2.Text = task.Description;
+            taskCreaterDateTimePicker1.Value = task.EndTime;
+            check = false;
         }
 
         private void mainFormLabel1_Click(object sender, System.EventArgs e)
@@ -63,19 +82,40 @@ namespace ToDoTaskManager
                     return;
                 }
 
-                Tasks newTask = new Tasks
+                Tasks newTask;
+
+                if (check)
                 {
-                    Id = Guid.NewGuid(),
-                    Description = description,
-                    StartTime = startTime,
-                    EndTime = endTime,
-                    Status = 1
-                };
+                    newTask = new Tasks
+                    {
+                        Id = Guid.NewGuid(),
+                        Description = description,
+                        StartTime = startTime,
+                        EndTime = endTime,
+                        Status = 1
+                    };
 
-                _tasksList.AddTask(newTask);
+                    _tasksList.AddTask(newTask);
 
-                MessageBox.Show("Задача добавлена.", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Задача добавлена.", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    newTask = new Tasks
+                    {
+                        Id = _task.Id,
+                        Description = description,
+                        StartTime = _task.StartTime,
+                        EndTime = endTime,
+                        Status = _task.Status
+                    };
 
+                    _tasksList.UpdateTask(newTask);
+
+                    MessageBox.Show("Задача обновлена.", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                _mainForm.MainFormUpdater();
                 this.Close();
             }
             catch (Exception ex)

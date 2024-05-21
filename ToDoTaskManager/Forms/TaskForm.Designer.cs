@@ -44,14 +44,14 @@
             this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.materialFlatButton1.Depth = 0;
             this.materialFlatButton1.Icon = null;
-            this.materialFlatButton1.Location = new System.Drawing.Point(127, 439);
+            this.materialFlatButton1.Location = new System.Drawing.Point(150, 460);
             this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialFlatButton1.Name = "materialFlatButton1";
             this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(143, 36);
+            this.materialFlatButton1.Size = new System.Drawing.Size(84, 36);
             this.materialFlatButton1.TabIndex = 6;
-            this.materialFlatButton1.Text = "Создать задачу";
+            this.materialFlatButton1.Text = "Создать";
             this.materialFlatButton1.UseVisualStyleBackColor = true;
             this.materialFlatButton1.Click += new System.EventHandler(this.materialFlatButton1_Click);
             // 
@@ -101,11 +101,11 @@
             this.mainFormLabel1.BackColor = System.Drawing.Color.Transparent;
             this.mainFormLabel1.Font = new System.Drawing.Font("Arial", 24F);
             this.mainFormLabel1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.mainFormLabel1.Location = new System.Drawing.Point(70, 27);
+            this.mainFormLabel1.Location = new System.Drawing.Point(60, 27);
             this.mainFormLabel1.Name = "mainFormLabel1";
-            this.mainFormLabel1.Size = new System.Drawing.Size(244, 36);
+            this.mainFormLabel1.Size = new System.Drawing.Size(269, 36);
             this.mainFormLabel1.TabIndex = 1;
-            this.mainFormLabel1.Text = "Создать задачу";
+            this.mainFormLabel1.Text = "Создание задачи";
             this.mainFormLabel1.Click += new System.EventHandler(this.mainFormLabel1_Click);
             // 
             // taskCreaterLabel1
@@ -122,12 +122,12 @@
             this.taskCreaterLabel1.Text = "Описание";
             this.taskCreaterLabel1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // TaskCreater1
+            // TaskForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(380, 490);
+            this.ClientSize = new System.Drawing.Size(380, 510);
             this.Controls.Add(this.materialFlatButton1);
             this.Controls.Add(this.taskCreaterLabel2);
             this.Controls.Add(this.taskCreaterTextBox2);
@@ -135,8 +135,8 @@
             this.Controls.Add(this.mainFormLabel1);
             this.Controls.Add(this.taskCreaterLabel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(380, 490);
-            this.Name = "TaskCreater1";
+            this.MinimumSize = new System.Drawing.Size(380, 510);
+            this.Name = "TaskForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.TaskCreater_Load);
             this.ResumeLayout(false);

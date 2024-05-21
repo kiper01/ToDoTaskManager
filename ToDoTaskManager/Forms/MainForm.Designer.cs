@@ -29,23 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.mainFormLabel2 = new ToDoTaskManager.Entities.Design.MainFormLabel();
             this.mainFormLabel1 = new ToDoTaskManager.Entities.Design.MainFormLabel();
             this.mainFormButton1 = new ToDoTaskManager.MainFormButton();
+            this.mainFormFlowLayoutPanel1 = new ToDoTaskManager.Entities.Design.MainFormFlowLayoutPanel();
             this.SuspendLayout();
-            // 
-            // mainFormLabel2
-            // 
-            this.mainFormLabel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.mainFormLabel2.AutoSize = true;
-            this.mainFormLabel2.BackColor = System.Drawing.Color.Transparent;
-            this.mainFormLabel2.Font = new System.Drawing.Font("Arial", 20F);
-            this.mainFormLabel2.ForeColor = System.Drawing.Color.Black;
-            this.mainFormLabel2.Location = new System.Drawing.Point(33, 383);
-            this.mainFormLabel2.Name = "mainFormLabel2";
-            this.mainFormLabel2.Size = new System.Drawing.Size(216, 32);
-            this.mainFormLabel2.TabIndex = 2;
-            this.mainFormLabel2.Text = "mainFormLabel2";
             // 
             // mainFormLabel1
             // 
@@ -67,7 +54,7 @@
             this.mainFormButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(71)))), ((int)(((byte)(79)))));
             this.mainFormButton1.Font = new System.Drawing.Font("Arial", 28F, System.Drawing.FontStyle.Bold);
             this.mainFormButton1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.mainFormButton1.Location = new System.Drawing.Point(633, 433);
+            this.mainFormButton1.Location = new System.Drawing.Point(633, 443);
             this.mainFormButton1.Name = "mainFormButton1";
             this.mainFormButton1.Radius = 55;
             this.mainFormButton1.Size = new System.Drawing.Size(55, 55);
@@ -75,17 +62,29 @@
             this.mainFormButton1.Text = "+";
             this.mainFormButton1.Click += new System.EventHandler(this.mainFormButton1_Click);
             // 
+            // mainFormFlowLayoutPanel1
+            // 
+            this.mainFormFlowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainFormFlowLayoutPanel1.AutoScroll = true;
+            this.mainFormFlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.mainFormFlowLayoutPanel1.Location = new System.Drawing.Point(12, 90);
+            this.mainFormFlowLayoutPanel1.Name = "mainFormFlowLayoutPanel1";
+            this.mainFormFlowLayoutPanel1.Size = new System.Drawing.Size(676, 347);
+            this.mainFormFlowLayoutPanel1.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(700, 500);
-            this.Controls.Add(this.mainFormLabel2);
+            this.ClientSize = new System.Drawing.Size(700, 510);
             this.Controls.Add(this.mainFormLabel1);
             this.Controls.Add(this.mainFormButton1);
+            this.Controls.Add(this.mainFormFlowLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(700, 500);
+            this.MinimumSize = new System.Drawing.Size(700, 510);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
@@ -97,7 +96,7 @@
 
         private MainFormButton mainFormButton1;
         private Entities.Design.MainFormLabel mainFormLabel1;
-        private Entities.Design.MainFormLabel mainFormLabel2;
+        private Entities.Design.MainFormFlowLayoutPanel mainFormFlowLayoutPanel1;
     }
 }
 
